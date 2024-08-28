@@ -11,6 +11,7 @@
     "@noble/hashes": "npm:@noble/hashes@^1.4.0",
     "@noble/secp256k1": "npm:@noble/secp256k1@^2.1.0",
     "@nostr/tools": "jsr:@nostr/tools@^2.3.1",
+    "@scure/bip32": "npm:@scure/bip32@^1.4.0",
     "@std/assert": "jsr:@std/assert@1",
     "@std/crypto": "jsr:@std/crypto@^1.0.3",
     "fs": "npm:fs@^0.0.2",

@@ -16,6 +16,7 @@
       "npm:@noble/hashes@^1.4.0": "npm:@noble/hashes@1.4.0",
       "npm:@noble/secp256k1@^2.1.0": "npm:@noble/secp256k1@2.1.0",
       "npm:@scure/base@1.1.1": "npm:@scure/base@1.1.1",
+      "npm:@scure/bip32@^1.4.0": "npm:@scure/bip32@1.4.0",
       "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:fs@^0.0.2": "npm:fs@0.0.2",
       "npm:siwe@^2.3.2": "npm:siwe@2.3.2_ethers@6.13.2"
@@ -297,6 +298,12 @@
           "@noble/hashes": "@noble/hashes@1.3.2"
         }
       },
+      "@noble/curves@1.4.2": {
+        "integrity": "sha512-TavHr8qycMChk8UwMld0ZDRvatedkzWfH8IiaeGCfymOP5i0hSCozz9vHOL0nkwk7HRMlFnAiKpS2jrUmSybcw==",
+        "dependencies": {
+          "@noble/hashes": "@noble/hashes@1.4.0"
+        }
+      },
       "@noble/hashes@1.3.1": {
         "integrity": "sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==",
         "dependencies": {}
@@ -316,6 +323,18 @@
       "@scure/base@1.1.1": {
         "integrity": "sha512-ZxOhsSyxYwLJj3pLZCefNitxsj093tb2vq90mp2txoYeBqbcjDjqFhyM8eUjq/uFm6zJ+mUuqxlS2FkuSY1MTA==",
         "dependencies": {}
+      },
+      "@scure/base@1.1.7": {
+        "integrity": "sha512-PPNYBslrLNNUQ/Yad37MHYsNQtK67EhWb6WtSvNLLPo7SdVZgkUjD6Dg+5On7zNwmskf8OX7I7Nx5oN+MIWE0g==",
+        "dependencies": {}
+      },
+      "@scure/bip32@1.4.0": {
+        "integrity": "sha512-sVUpc0Vq3tXCkDGYVWGIZTRfnvu8LoTDaev7vbwh0omSvVORONr960MQWdKqJDCReIEmTj3PAr73O3aoxz7OPg==",
+        "dependencies": {
+          "@noble/curves": "@noble/curves@1.4.2",
+          "@noble/hashes": "@noble/hashes@1.4.0",
+          "@scure/base": "@scure/base@1.1.7"
+        }
       },
       "@spruceid/siwe-parser@2.1.2": {
         "integrity": "sha512-d/r3S1LwJyMaRAKQ0awmo9whfXeE88Qt00vRj91q5uv5ATtWIQEGJ67Yr5eSZw5zp1/fZCXZYuEckt8lSkereQ==",
@@ -646,6 +665,7 @@
     "https://esm.sh/@noble/hashes@1.4.0/hkdf.js": "781013dbf10b487b0b08a1f6144d8427d4b2b59b839704db76c677279e3a1603",
     "https://esm.sh/@noble/hashes@1.4.0/sha256.js": "7928876059c3e94e0cafc5260eb3acced159f17aa36992cf9b64468c940c2fd0",
     "https://esm.sh/@noble/hashes@1.4.0/utils.js": "95669d1b0527eac21d909324cf82db1f93729f00772c1779e6a46a5e45d55b95",
+    "https://esm.sh/@scure/bip32@1.4.0": "075f1f796876fb72f14f51d7b37a87cfa2d6335164cfc1001f4fd2b1842603cb",
     "https://esm.sh/siwe@2.3.2": "732e029b7499e65ca41b46cafd33476a36df51859f8224aeec63dc19ec383b2e",
     "https://esm.sh/v135/@adraffy/ens-normalize@1.10.1/denonext/ens-normalize.mjs": "32a1f5e1ab2dbc99bd16efdfeee5ced3656d4b53ad059f2587d272c556110005",
     "https://esm.sh/v135/@noble/curves@1.2.0/denonext/_shortw_utils.js": "47a889dd52d7b29e8bc0d641597239d0ae0b1f10a9ee3b114c3dbd273172e9af",
@@ -655,6 +675,13 @@
     "https://esm.sh/v135/@noble/curves@1.2.0/denonext/abstract/utils.js": "33d6521fbb6756d058dff59616da1e55a55972b4848976c27e81c4b4bc36c0e4",
     "https://esm.sh/v135/@noble/curves@1.2.0/denonext/abstract/weierstrass.js": "5cb85ed9ad826f7e623f0052a55a865ad957eab06c30697804157844e82416a9",
     "https://esm.sh/v135/@noble/curves@1.2.0/denonext/secp256k1.js": "da024e491d38a1407d3bdf54f669bbefb879b710dfae945d4ca58a676fcfd37d",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/_shortw_utils.js": "1b7f6384fd65ad44063dd470879ccc71985102451115ffeca827b95609be2a69",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/abstract/curve.js": "4158cfb48582c30233fa568583978c985dc630903dc3937fa6ef19398cf4e6aa",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/abstract/hash-to-curve.js": "5b64ccf20a7af1c9a4b7b100553b0d8e34bdf579c7000b9d640d056bd5e6f853",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/abstract/modular.js": "0172102c6727676c37aefa9c2e6f6f05ba376659742117d71cdef1d6ce75baf4",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/abstract/utils.js": "c7e2a4e246f8ba390823bf03011587ed035d0f4f596931bc29d7fe3a39daf4c2",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/abstract/weierstrass.js": "141bec01eee209717772cfdba6ce88dcc91b8ec6036fcae5887fc8021d97a003",
+    "https://esm.sh/v135/@noble/curves@1.4.0/denonext/secp256k1.js": "9cdfa426e91cb6c3f80c1992dfd13f6dac6024b5d4a4d0b16d8992dfe1311876",
     "https://esm.sh/v135/@noble/hashes@1.3.2/denonext/_assert.js": "8b3fcc3a8d18f25fded5ecb46250f2009f11e0586b0e1e33757d12b6d1b05591",
     "https://esm.sh/v135/@noble/hashes@1.3.2/denonext/_sha2.js": "9571edb1dbcf00041aaa5b4d9bafb109bb9944bf47452fae653206a0242c2a0a",
     "https://esm.sh/v135/@noble/hashes@1.3.2/denonext/crypto.js": "3d09b6d143b1cb8ec95375586a7d9a30a02b60cb1de984ba374c779f8e6c877a",
@@ -671,9 +698,13 @@
     "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/crypto.js": "e8ce6f1233e496ccda7379228aa8426017735bedad6a497bf0dd61fc832cdf79",
     "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/hkdf.js": "eb8b6e781998bfceeed0b48faa704c02e8009ce68533bcb5ae5a7211df8c4fa6",
     "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/hmac.js": "9068c257616e936e8c005e0fd4f8fbe8018e2414977701933f84fe2c83c6b8cc",
+    "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/ripemd160.js": "5820f34f8cc035a7166585f5440c76ce10d3239d07dbfbda45793cc51631b2ad",
     "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/sha256.js": "907b6235f813a743240f7c78e4cb9be27e92eb911d5b90f44f7c138f257259a1",
     "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/sha3.js": "420c5eb42bd3d497f6cfa510947b095dce70db4e5bc3d6e53d6678ac41420006",
+    "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/sha512.js": "f004f9f72ffc4e1af353c2b42a0c4a331415322e6af1ba2f756602e6cbf0136b",
     "https://esm.sh/v135/@noble/hashes@1.4.0/denonext/utils.js": "ab93c0722cdd5d75695482b9bcc4d514d61934595204030a9881a09488be3634",
+    "https://esm.sh/v135/@scure/base@1.1.6/denonext/base.mjs": "7c4c43cca9644ce6301e900ab7edcfebfd057ca778fa0efdd0cb746ae4339c6a",
+    "https://esm.sh/v135/@scure/bip32@1.4.0/denonext/bip32.mjs": "8e6c03844b799a21055aa606b4766f81a454c33613776ba1a5ea2e3cc1af8b1b",
     "https://esm.sh/v135/@spruceid/siwe-parser@2.1.2/denonext/siwe-parser.mjs": "78e3d130f6ad68b2d9cf4b1c59e036549a7eecc0618eac7615589ede3b36fbbd",
     "https://esm.sh/v135/@stablelib/binary@1.0.1/denonext/binary.mjs": "f820d14247b819744152e4fed3e300b9e02981b717120fdaeed33dddcbb73ae2",
     "https://esm.sh/v135/@stablelib/int@1.0.1/denonext/int.mjs": "ff7e6326a021e53548447a46012263203b3759f225087c086ea888b59c302d06",
@@ -708,6 +739,7 @@
       "npm:@ethersproject/wallet@^5.7.0",
       "npm:@noble/hashes@^1.4.0",
       "npm:@noble/secp256k1@^2.1.0",
+      "npm:@scure/bip32@^1.4.0",
       "npm:fs@^0.0.2",
       "npm:siwe@^2.3.2"
     ]
