@@ -339,12 +339,12 @@ var U2 = C(() => new C2());
 
 // src/bundled/encrypted-root-key/toBundle.ts
 var go = async () => {
-  const randomEntropy = await crypto.getRandomValues(new Uint8Array(32));
+  const random = await crypto.getRandomValues(new Uint8Array(32));
   const entropies = await Lit.Actions.broadcastAndCollect({
     name: "seeds",
-    value: ethers.utils.hexlify(randomEntropy)
+    value: ethers.utils.hexlify(random)
   });
-  const entropyHex = entropies.reduce((acc, s5, idx) => acc + s5.slice(2), "0x");
+  const entropyHex = entropies.sort().reduce((acc, s5, idx) => acc + s5.slice(2), "0x");
   const entropy = H(y2, ethers.utils.arrayify(entropyHex), new Uint8Array(32), "seed", 32);
   const password = "";
   const encoder = new TextEncoder();
@@ -355,10 +355,11 @@ var go = async () => {
   const path = "m/44'/60'/0'/0";
   const networkHDNode = rootHDNode.derivePath(path);
   const { extendedKey: bip32ExtendedPrivateKey } = networkHDNode;
-  const firstAddressHDNode = rootHDNode.derivePath("m/44'/60'/0'/0/0");
+  const firstAddressHDNode = rootHDNode.derivePath(`${path}/0`);
   const firstWallet = new ethers.Wallet(firstAddressHDNode);
   const { address: firstAddress, publicKey: firstAddressPubKey } = firstWallet;
   const response = JSON.stringify({
+    allRandoms: entropies,
     entropy: ethers.utils.hexlify(entropy),
     bip39Seed: ethers.utils.hexlify(seed),
     bip32RootKey,
