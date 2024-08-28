@@ -18,18 +18,6 @@ function bytesToHexString(bytes: Uint8Array) {
     .join("");
 }
 
-async function generateRandomSeed() {
-  // return await crypto.subtle.generateKey(
-  //   {name: "HMAC", hash: "SHA-256"}, 
-  //   true, //extractable
-  //   ["sign", "verify"] //uses
-  // )
-    
-  const key = await crypto.getRandomValues(new Uint8Array(32));
-  const hexString = bytesToHexString(key);
-  return hexString;
-}
-
 function numToBytes(num: number, bytes: number) {
   const b = new ArrayBuffer(bytes);
   const v = new DataView(b);
@@ -46,38 +34,53 @@ function numToBytes(num: number, bytes: number) {
 //   return seckey;
 // }
 
-async function generateSeckey(initialKey: string, keyIndex: number) {
-  const dkLen = 32; // HKDF output key length
-  const salt = numToBytes(keyIndex, dkLen); // HKDF salt is set to a zero-filled byte sequence equal to the hash's output length
-  const info = "seckey";
-  const seckey = hkdf(sha256, hexToBytes(initialKey), salt, info, dkLen);
-  console.log(seckey, 'seckey');
-  // const publicKey = getPublicKey(seckey);
-  // console.log(publicKey, 'publicKey');
-  return seckey;
-}
+// async function generateSeckey(initialKey: string, keyIndex: number) {
+//   const dkLen = 32; // HKDF output key length
+//   const salt = numToBytes(keyIndex, dkLen); // HKDF salt is set to a zero-filled byte sequence equal to the hash's output length
+//   const info = "seckey";
+//   const seckey = hkdf(sha256, hexToBytes(initialKey), salt, '', 32);
+//   console.log(seckey, 'seckey');
+//   // const publicKey = getPublicKey(seckey);
+//   // console.log(publicKey, 'publicKey');
+  
+//   return seckey;
+// }
 
 const go = async () => {
-  const seed = await generateRandomSeed();
+  const randomSeed = await crypto.getRandomValues(new Uint8Array(32));
 
-  // TODO:
-  //  - combine
-  //  - getPublicKey
-
-  const seedKeys = await Lit.Actions.broadcastAndCollect({
-    name: "seedKeys",
-    value: seed,
+  const seeds: string[] = await Lit.Actions.broadcastAndCollect({
+    name: 'seeds',
+    value: ethers.utils.hexlify(randomSeed),
   });
 
-  // console.log("combineKeys", combineKeys.join(''), combineKeys);
-  const combineSeedKeys = seedKeys.join("");
-  const seckey = await generateSeckey(combineSeedKeys, 0);
+  // BIP39 Seed
+  const seedsHex = seeds.reduce((acc, s, idx) => acc + s.slice(2), '0x');
+  const seed = hkdf(sha256, ethers.utils.arrayify(seedsHex), new Uint8Array(32), 'seed', 32);
 
-  console.log("seckey", seckey, 'combineSeedKeys', combineSeedKeys);
-  // generateSeckey(seckey, 0);
+  // BIP32 Root Key
+  const rootHDNode = ethers.HDNode.fromSeed(seed);
+  const { extendedKey: bip32RootKey } = rootHDNode;
 
-  Lit.Actions.setResponse({ response: combineSeedKeys });
-  // Lit.Actions.setResponse({ response: JSON.stringify(combineKeys) });
+  // BIP32 Derivation Path
+  const path = "m/44'/60'/0'/0";
+
+  // BIP32 Extended Private Key
+  const networkHDNode = rootHDNode.deriveKey(path);
+  const { extendedKey: bip32ExtendedPrivateKey } = networkHDNode
+
+  const firstWallet = new ethers.Wallet(rootHDNode.deriveKey("m/44'/60'/0'/0/0"));
+  const { address: firstAddress, publicKey: firstAddressPubKey } = firstWallet;
+
+  const response = JSON.stringify({
+    bip39Seed: ethers.utils.hexlify(seed),
+    bip32RootKey,
+    bip32ExtendedPrivateKey,
+    firstAddress,
+    firstAddressPubKey,
+  })
+
+  Lit.Actions.setResponse({ response });
 };
 
 go();
