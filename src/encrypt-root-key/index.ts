@@ -13,11 +13,12 @@ import { sha256 } from "https://esm.sh/@noble/hashes@1.4.0/sha256.js";
 
 const go = async () => {
   const random = await crypto.getRandomValues(new Uint8Array(32));
-
+  
   const entropies: string[] = await Lit.Actions.broadcastAndCollect({
     name: 'seeds',
     value: ethers.utils.hexlify(random),
   });
+
 
   // TODO: convert to mnemonic
   const entropyHex = entropies.sort().reduce((acc, s, idx) => acc + s.slice(2), '0x');
@@ -60,22 +61,47 @@ const go = async () => {
     }]
   });
 
-  // TODO: Encrypted
-  // const { ciphertext: u, dataToEncryptHash: c } = await Lit.Actions.encrypt({
-  //   accessControlConditions, // Presumably defined elsewhere to set access control for encryption
-  //   to_encrypt: bip32RootKey // Data to encrypt (encoded private key)
-  // });
-  // encrypte entrropy, bip32 rootkey(private key)
+  // https://developer.litprotocol.com/sdk/serverless-signing/combining-decryption-shares
+  const accessControlConditions =  [
+    {
+      contractAddress: '',
+      standardContractType: '',
+      chain: 'ethereum',
+      method: 'eth_getBalance',
+      parameters: [':userAddress', 'latest'],
+      returnValueTest: {
+        comparator: '>=',
+        value: '0',
+      },
+    },
+  ]
+
+  const utf8Encode = new TextEncoder();
   
-  // entrropyEncr = {
-  //   ciphertext,
-  //   dataToEncryptHash,
-  // },
-  // rootKey = {
-  //   ciphertext,
-  //   dataToEncryptHash,
-  // }
-  
+  // https://github.com/LIT-Protocol/js-sdk/blob/d30de12744552d41d1b1d709f737ae8a90d1ce3a/packages/wrapped-keys/src/lib/litActions/solana/src/generateEncryptedSolanaPrivateKey.js#L25
+  const { ciphertext: ciphertextRootKey, dataToEncryptHash: dataToEncryptHashRootKey } = await Lit.Actions.encrypt({
+    accessControlConditions,
+    to_encrypt: utf8Encode.encode(bip32RootKey) // Data to encrypt (encoded private key)
+  });
+
+  const { ciphertext: ciphertextEntropy, dataToEncryptHash: dataToEncryptEntropy } = await Lit.Actions.encrypt({
+    accessControlConditions,
+    to_encrypt: entropy // Data to encrypt (encoded entropy)
+  });
+
+  // TODO: Store this data to ceramics 
+  // console.log(JSON.stringify({
+  //   encryptedEntropy: {
+  //     chiperText: ciphertextEntropy,
+  //     dataToEncryptHash: dataToEncryptEntropy,
+  //   },
+  //   encryptedBip32RootKey: {
+  //     ciphertext: ciphertextRootKey,
+  //     dataToEncryptHash: dataToEncryptHashRootKey
+  //   },
+  //   accounts
+  // }))
+
   const response = JSON.stringify({
     // entropy: ethers.utils.hexlify(entropy),
     // bip39Seed: ethers.utils.hexlify(seed),
