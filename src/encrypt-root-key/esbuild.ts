@@ -1,26 +1,25 @@
-import * as esbuild from 'https://deno.land/x/esbuild@v0.23.0/mod.js'
+import * as esbuild from "https://deno.land/x/esbuild@v0.23.0/mod.js";
 import { denoPlugins } from "https://deno.land/x/esbuild_deno_loader@0.8.5/mod.ts";
 
 const go = async () => {
   let result = await esbuild.build({
-    // entryPoints: ["./src/bundled/siwe/test.ts"],
-    entryPoints: ["./src/bundled/encrypted-root-key/toBundle.ts"],
+    entryPoints: ["./src/encrypt-root-key/index.ts"],
     bundle: true,
-    minify: false,
+    minify: true,
     sourcemap: false,
-    outfile: "./bundled.js",
+    outfile: "./dist/encrypt-root-key.js",
     sourceRoot: "./",
     platform: "node",
     metafile: true,
     external: ["ethers"],
-    inject: ["./src/bundled/encrypted-root-key/esbuild-shims.ts"],
+    inject: ["./src/encrypt-root-key/esbuild-shims.ts"],
     plugins: denoPlugins(),
   });
 
   // Uncomment this if you want to analyze the metafile
   let text = await esbuild.analyzeMetafile(result.metafile);
   console.log(text);
-  
+
   console.log("Build completed successfully");
 };
 
