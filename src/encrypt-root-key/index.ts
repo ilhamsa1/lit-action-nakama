@@ -76,31 +76,39 @@ const go = async () => {
     },
   ]
 
-  const utf8Encode = new TextEncoder();
-  
   // https://github.com/LIT-Protocol/js-sdk/blob/d30de12744552d41d1b1d709f737ae8a90d1ce3a/packages/wrapped-keys/src/lib/litActions/solana/src/generateEncryptedSolanaPrivateKey.js#L25
-  const { ciphertext: ciphertextRootKey, dataToEncryptHash: dataToEncryptHashRootKey } = await Lit.Actions.encrypt({
-    accessControlConditions,
-    to_encrypt: utf8Encode.encode(bip32RootKey) // Data to encrypt (encoded private key)
-  });
+  const resp = await Lit.Actions.runOnce(
+    { waitForResponse: true, name: 'encryptedPrivateKey' },
+    async () => {
+      
+        const utf8Encode = new TextEncoder();
+        
+        const { ciphertext: ciphertextRootKey, dataToEncryptHash: dataToEncryptHashRootKey } = await Lit.Actions.encrypt({
+          accessControlConditions,
+          to_encrypt: utf8Encode.encode(bip32RootKey) // Data to encrypt (encoded private key)
+        });
+      
+        const { ciphertext: ciphertextEntropy, dataToEncryptHash: dataToEncryptEntropy } = await Lit.Actions.encrypt({
+          accessControlConditions,
+          to_encrypt: entropy // Data to encrypt (encoded entropy)
+        });
+        // TODO: Store this data to ceramics 
+        return JSON.stringify({
+          encryptedEntropy: {
+            chiperText: ciphertextEntropy,
+            dataToEncryptHash: dataToEncryptEntropy,
+          },
+          encryptedBip32RootKey: {
+            ciphertext: ciphertextRootKey,
+            dataToEncryptHash: dataToEncryptHashRootKey
+          },
+          accounts,
+          // npub,
+        })
+    }
+  )
 
-  const { ciphertext: ciphertextEntropy, dataToEncryptHash: dataToEncryptEntropy } = await Lit.Actions.encrypt({
-    accessControlConditions,
-    to_encrypt: entropy // Data to encrypt (encoded entropy)
-  });
-
-  // TODO: Store this data to ceramics 
-  // console.log(JSON.stringify({
-  //   encryptedEntropy: {
-  //     chiperText: ciphertextEntropy,
-  //     dataToEncryptHash: dataToEncryptEntropy,
-  //   },
-  //   encryptedBip32RootKey: {
-  //     ciphertext: ciphertextRootKey,
-  //     dataToEncryptHash: dataToEncryptHashRootKey
-  //   },
-  //   accounts
-  // }))
+  console.log(resp, resp)
 
   const response = JSON.stringify({
     // entropy: ethers.utils.hexlify(entropy),
