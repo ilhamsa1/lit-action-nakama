@@ -50,7 +50,7 @@ const go = async () => {
 
   const accounts = [0].map((num) => {
     const path = `${networkPath}/${num}`;
-    const hd = rootHDNode.derivePath(firstPath);
+    const hd = rootHDNode.derivePath(path);
     const wallet = new ethers.Wallet(hd);
     const { address, publicKey: publicKeyLong } = wallet;
     return [path, {
