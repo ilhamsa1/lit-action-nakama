@@ -88,16 +88,8 @@ const go = async () => {
           to_encrypt: utf8Encode.encode(bip32RootKey) // Data to encrypt (encoded private key)
         });
       
-        const { ciphertext: ciphertextEntropy, dataToEncryptHash: dataToEncryptEntropy } = await Lit.Actions.encrypt({
-          accessControlConditions,
-          to_encrypt: entropy // Data to encrypt (encoded entropy)
-        });
         // TODO: Store this data to ceramics 
         return JSON.stringify({
-          encryptedEntropy: {
-            chiperText: ciphertextEntropy,
-            dataToEncryptHash: dataToEncryptEntropy,
-          },
           encryptedBip32RootKey: {
             ciphertext: ciphertextRootKey,
             dataToEncryptHash: dataToEncryptHashRootKey
