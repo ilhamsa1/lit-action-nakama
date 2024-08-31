@@ -89,7 +89,7 @@ const go = async () => {
         });
       
         // TODO: Store this data to ceramics 
-        return JSON.stringify({
+        const userSecret = JSON.stringify({
           encryptedBip32RootKey: {
             ciphertext: ciphertextRootKey,
             dataToEncryptHash: dataToEncryptHashRootKey
@@ -97,11 +97,19 @@ const go = async () => {
           accounts,
           // npub,
         })
+
+        return userSecret
     }
   )
+  
+  const dataToSign = ethers.utils.arrayify(ethers.utils.keccak256(new TextEncoder().encode(resp)));
 
-  console.log(resp, resp)
-
+  await Lit.Actions.signEcdsa({
+    toSign: dataToSign,
+    publicKey,
+    sigName: 'sigSecretKey',
+  });
+  
   const response = JSON.stringify({
     // entropy: ethers.utils.hexlify(entropy),
     // bip39Seed: ethers.utils.hexlify(seed),
